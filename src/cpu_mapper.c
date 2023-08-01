@@ -42,14 +42,14 @@ u8 cpuread(Memmap *m, u16 address) {
     return m->lower_prg[address];
   } else if (address <= END_UPPER_PRG) {
     return m->upper_prg[address];
+  } else {
+    fprintf(stderr,
+            "Invalid address in the memory mapper, the CPU tried to access "
+            "0x%04X.\n",
+            address);
+
+    return 0; // return a dummy. whatever.
   }
-
-  fprintf(
-      stderr,
-      "Invalid address in the memory mapper, the CPU tried to access 0x%04X.",
-      address);
-
-  return 0; // return a dummy. whatever.
 }
 
 // TODO: find a better (but still fast) way to reuse the mapper code, maybe
@@ -70,10 +70,10 @@ void cpuwrite(Memmap *m, u16 address, u8 to_write) {
     m->lower_prg[address] = to_write;
   } else if (address <= END_UPPER_PRG) {
     m->upper_prg[address] = to_write;
+  } else {
+    fprintf(stderr,
+            "Invalid address in the memory mapper, the CPU tried to write the "
+            "byte 0x%02X to address 0x%04X.\n",
+            to_write, address);
   }
-
-  fprintf(stderr,
-          "Invalid address in the memory mapper, the CPU tried to write the "
-          "byte 0x%02X to address 0x%04X.",
-          to_write, address);
 }

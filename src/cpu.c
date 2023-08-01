@@ -1201,7 +1201,7 @@ void handle_instruction(Memmap *map, CPUState *cs) {
 static void override_instruction(CPUState *cs, Memmap *map, u8 *instruction,
                                  uint instruction_size) {
   for (int i = 0; i < instruction_size; i++) {
-    write_8(map, cs->pc, instruction[i]);
+    write_8(map, cs->pc + i, instruction[i]);
   }
 }
 
