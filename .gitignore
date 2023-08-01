@@ -1,0 +1,47 @@
+# .gitignore for a C project
+
+# No .o files
+*.o
+
+# No .a files
+*.a
+
+# No .so files
+*.so
+
+# Ignore executables
+*.out
+*.exe
+*.app
+*.elf
+
+# Ignore build directory
+/build/*
+
+# Ignore debug logs
+*.log
+
+# Ignore core dumps
+core
+
+# Ignore IDE related files
+*.suo
+*.ntvs*
+*.njsproj
+*.slnx.sqlite
+*.sln
+*.user
+*.userosscache
+*.suo
+*.ipch
+*.dbmdl
+*.vcxproj
+*.vcxproj.filters
+
+# MacOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
