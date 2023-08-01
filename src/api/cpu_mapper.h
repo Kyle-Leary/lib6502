@@ -6,6 +6,30 @@
 
 #include "6502_defines.h"
 
+#define START_WRAM 0x0000
+#define END_WRAM 0x07FF
+#define WRAM_SIZE END_WRAM - START_WRAM
+#define END_WRAM_MIRROR 0x1800
+#define WRAM_MIRROR_SIZE END_WRAM_MIRROR - START_WRAM
+
+#define START_PPU_REG 0x2000
+#define END_PPU_REG 0x2007
+#define PPU_REG_SIZE END_PPU_REG - START_PPU_REG
+#define END_PPU_REG_MIRROR 0x3FFF
+#define PPU_REG_MIRROR_SIZE END_PPU_REG_MIRROR - START_PPU_REG
+
+#define START_APU_REG 0x4000
+#define END_APU_REG 0x401F
+
+// sram and lower_prg (and the upper prg) lead into eachother, they're
+// contiguous.
+#define START_SRAM 0x6000
+#define END_SRAM 0x7FFF
+#define START_LOWER_PRG 0x8000
+#define END_LOWER_PRG 0xBFFF
+#define START_UPPER_PRG 0xC000
+#define END_UPPER_PRG 0xFFFF
+
 // the actual memory mapping of all the components in the NES. the cpu requires
 // access to a pointer to the memmap and the cpu's state.
 typedef struct Memmap {
