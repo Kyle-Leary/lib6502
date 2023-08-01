@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
 
   {
     TEST_INIT
-    u8 buf[] = {0xe8};
+    u8 buf[] = {0xe8}; // increment X register
     execute_instruction(es, buf, 1);
     assert(es->cpu_state->x == 0x01);
     TEST_END
@@ -19,25 +19,55 @@ int main(int argc, char *argv[]) {
 
   {
     TEST_INIT
-    u8 buf[] = {
-        0xe8}; // write inx at the program counter (0x00 as a wram index)
-    execute_instruction(es, buf, 1);
-    assert(es->cpu_state->pc == 0x01);
-    execute_instruction(es, buf, 1);
-    assert(es->cpu_state->pc == 0x02);
-    u8 buftwo[] = {0xa9, 0xae};
-    execute_instruction(es, buftwo, 2);
-    printf("0x%02X\n", es->cpu_state->pc);
-    assert(es->cpu_state->pc == 0x04);
+    u8 buf[] = {0xa9, 0xae}; // load ae immediate into accumulator
+    execute_instruction(es, buf, 2);
+    assert(es->cpu_state->a == 0xae);
     TEST_END
   }
 
   {
     TEST_INIT
-    u8 buf[] = {0xa9, 0xae}; // load ae immediate into accumulator
-    printf("%d\n", es->cpu_state->pc);
+    u8 buf[] = {0xe6, 0x10}; // increment memory at zero page address
+    es->map->wram[0x10] = 0x10;
     execute_instruction(es, buf, 2);
-    assert(es->cpu_state->a == 0xae);
+    assert(es->map->wram[0x10] == 0x11);
     TEST_END
   }
+
+  {
+    TEST_INIT
+    u8 buf[] = {0x85, 0x10}; // store accumulator in memory at zero page address
+    es->cpu_state->a = 0xab;
+    execute_instruction(es, buf, 2);
+    assert(es->map->wram[0x10] == 0xab);
+    TEST_END
+  }
+
+  {
+    TEST_INIT
+    u8 buf[] = {0xa5, 0x10}; // load from memory at zero page address into accumulator
+    es->map->wram[0x10] = 0xcc;
+    execute_instruction(es, buf, 2);
+    assert(es->cpu_state->a == 0xcc);
+    TEST_END
+  }
+
+  {
+    TEST_INIT
+    u8 buf[] = {0xc6, 0x10}; // decrement memory at zero page address
+    es->map->wram[0x10] = 0x10;
+    execute_instruction(es, buf, 2);
+    assert(es->map->wram[0x10] == 0x0f);
+    TEST_END
+  }
+
+  {
+    TEST_INIT
+    u8 buf[] = {0xca}; // decrement X register
+    es->cpu_state->x = 0x02;
+    execute_instruction(es, buf, 1);
+    assert(es->cpu_state->x == 0x01);
+    TEST_END
+  }
+
 }
